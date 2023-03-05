@@ -8,6 +8,7 @@ public class EntityMnager : MonoBehaviour
 
     public Material hitMaterial;
     public bool isStop;
+
     void Awake()
     {
         instance = this;

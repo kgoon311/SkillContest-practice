@@ -4,24 +4,22 @@ using UnityEngine;
 
 public abstract class Entity : MonoBehaviour
 {
-    protected MeshRenderer meshRenderer;
-    private Material hitMaterial;
+    protected Renderer meshRenderer;
+    public Material hitMaterial;
+
+    private bool isPlayingHitAnim;
+    public bool isInvi;
 
     [Header("Inspector")]
     [SerializeField]
     protected float hp;
     [SerializeField]
-    protected float dmg;
-    [SerializeField]
     protected float speed;
-
-    protected bool isInvi;
 
     
     protected virtual void Awake()
     {
-        meshRenderer = gameObject.GetComponent<MeshRenderer>();
-        meshRenderer.materials = new Material[2];
+        meshRenderer = gameObject.GetComponent<Renderer>();
     }
     protected virtual void Start()
     {
@@ -33,6 +31,10 @@ public abstract class Entity : MonoBehaviour
         {
             Move();
             Attack();
+        }
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            StartCoroutine(HitAnime());
         }
     }
 
@@ -50,11 +52,18 @@ public abstract class Entity : MonoBehaviour
     }
     protected IEnumerator HitAnime()
     {
-        meshRenderer.materials[1] = hitMaterial;
-        yield return new WaitForSeconds(0.3f);
-        meshRenderer.materials[0] = null;
+        if (isPlayingHitAnim == true)
+            yield break;
+
+        isPlayingHitAnim = true;
+        meshRenderer.material = hitMaterial;
+
+        yield return new WaitForSeconds(0.6f);
+
+        isPlayingHitAnim = false;
+        meshRenderer.materials = new Material[0];
     }
-    protected IEnumerator Inui(float inviTime)
+    protected IEnumerator Invi(float inviTime)
     {
         isInvi = true;
         yield return new WaitForSeconds(inviTime);
