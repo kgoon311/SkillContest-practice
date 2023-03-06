@@ -31,7 +31,7 @@ public class Enemy : Entity
             atkTimer = 0;
         }
     }
-    protected IEnumerator AttackPattern()
+    protected virtual IEnumerator AttackPattern()
     {
         yield return null; 
     }
