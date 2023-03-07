@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    public static Player instance;
+
     [SerializeField] private float oil;
     [SerializeField] private float inviTime;
     [Header("MoveRimite")]
@@ -19,10 +21,12 @@ public class Player : Entity
     [SerializeField] private GameObject[] droneGroup = new GameObject[4];
     [SerializeField] private GameObject droneBullet;
     [SerializeField] private GameObject targetObject;
+    [SerializeField] private Vector3[] dronePos = new Vector3[4]; 
     [SerializeField] private int droneCount;
 
     protected override void Awake()
     {
+        instance = this; 
         base.Awake();
     }
     protected override void Start()
@@ -46,10 +50,11 @@ public class Player : Entity
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, moveRimite[0].x, moveRimite[1].x),0, 
                                          Mathf.Clamp(transform.position.z, moveRimite[0].y, moveRimite[1].y));
 
-        droneGroup[0].transform.position = transform.position + new Vector3(-3, 0, 0);
-        droneGroup[1].transform.position = transform.position + new Vector3(3, 0, 0);
-        droneGroup[2].transform.position = transform.position + new Vector3(-5, 0, 0);
-        droneGroup[3].transform.position = transform.position + new Vector3(5, 0, 0);
+        for(int i = 0; i<droneCount;i++)
+        {
+            droneGroup[0].transform.position = Vector3.Lerp(droneGroup[i].transform.position, 
+                                                            transform.position + dronePos[i], Time.deltaTime * 3);
+        }
 
         transform.rotation = Quaternion.Lerp(Quaternion.Euler(0,0,0),
                                             Quaternion.Euler(0,0,-25 * horizontal), Mathf.Abs(horizontal));
