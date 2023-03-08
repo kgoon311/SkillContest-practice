@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 596221954378393784}
   m_Layer: 0
   m_Name: bullet1
-  m_TagString: Untagged
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,4 +164,5 @@ MonoBehaviour:
   isInvi: 0
   hp: 1
   speed: 30
-  deathTimer: 4
+  deathTimer: 2
+  dmg: 0

@@ -14,18 +14,13 @@ public class EyeMonster : Enemy
     protected override void Move()
     {
         transform.LookAt(playerPos.position);
-        transform.position += new Vector3(0, 0, -speed * Time.deltaTime);
-    }
-    protected override void Attack()
-    {
-        base.Attack();
-    }
+        transform.position += Vector3.forward * -speed * Time.deltaTime;
+    }                              
     protected override IEnumerator AttackPattern()
     {
-        float angle = transform.rotation.x * Mathf.Rad2Deg;
         for(int i = -1;i <2;i++)
         {
-            Instantiate(bullet, transform.position, Quaternion.Euler(0, angle + (30 * i), 0));
+            Instantiate(bullet, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y +(30 * i), 0));
         }
         yield return null;
     }

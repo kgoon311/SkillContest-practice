@@ -52,7 +52,7 @@ public class Player : Entity
 
         for(int i = 0; i<droneCount;i++)
         {
-            droneGroup[0].transform.position = Vector3.Lerp(droneGroup[i].transform.position, 
+            droneGroup[i].transform.position = Vector3.Lerp(droneGroup[i].transform.position, 
                                                             transform.position + dronePos[i], Time.deltaTime * 3);
         }
 
@@ -97,9 +97,9 @@ public class Player : Entity
                 }
             case 3:
                 {
-                    Instantiate(bullet[1], transform.position + new Vector3(-1f, 0, 0)  , Quaternion.Euler(0,0,0));
+                    Instantiate(bullet[1], transform.position + new Vector3(-0.7f, 0, 0)  , Quaternion.Euler(0,0,0));
                     Instantiate(bullet[2], transform.position + new Vector3(0, 0, 0.3f) , Quaternion.Euler(0,0,0));
-                    Instantiate(bullet[1], transform.position + new Vector3(1f, 0, 0)   , Quaternion.Euler(0, 0, 0));
+                    Instantiate(bullet[1], transform.position + new Vector3(0.7f, 0, 0)   , Quaternion.Euler(0, 0, 0));
                     break;
                 }
         }
@@ -121,6 +121,20 @@ public class Player : Entity
     {
         base.Hit(hitDmg);
         Invi(inviTime);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyBullet"))
+        {
+            float dmg = other.GetComponent<EnemyBullet>().dmg;
+            Hit(dmg);
+
+            Destroy(other.gameObject);
+        }
+        if(other.CompareTag("Item"))
+        {
+
+        }
     }
     private void GameOver()
     {

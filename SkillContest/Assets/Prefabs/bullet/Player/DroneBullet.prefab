@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1098508509746838934}
   m_Layer: 0
   m_Name: DroneBullet
-  m_TagString: Untagged
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,5 +164,5 @@ MonoBehaviour:
   isInvi: 0
   hp: 1
   speed: 30
-  deathTimer: 4
+  deathTimer: 2
   targetObject: {fileID: 0}

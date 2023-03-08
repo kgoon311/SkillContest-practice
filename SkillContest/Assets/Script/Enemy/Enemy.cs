@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Entity
+public abstract class Enemy : Entity
 {
     [SerializeField] protected GameObject bullet;
     [SerializeField] protected float atkSpeed;
@@ -39,8 +39,14 @@ public class Enemy : Entity
         if (deathTimer < 0)
             Destroy(gameObject);
     }
-    protected virtual IEnumerator AttackPattern()
+    private void OnTriggerEnter(Collider other)
     {
-        yield return null; 
+        if (other.CompareTag("PlayerBullet"))
+        {
+            float dmg = other.GetComponent<PlayerBullet>().dmg;
+            Hit(dmg);
+            Destroy(other.gameObject);
+        }
     }
+    protected abstract IEnumerator AttackPattern();
 }
