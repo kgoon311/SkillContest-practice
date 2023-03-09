@@ -1,12 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Entity
 {
     public static Player instance;
 
     [SerializeField] private float oil;
+    [SerializeField] private float maxOil;
+    public float _oil { get { return oil; } set { oil = value; } }
+    public float _maxOil { get { return maxOil; } set { maxOil = value; } }
+
     [SerializeField] private float inviTime;
     [Header("MoveRimite")]
     [SerializeField] private Vector2[] moveRimite = new Vector2[2]; 
@@ -17,10 +23,11 @@ public class Player : Entity
     [SerializeField] private int attackLv;
     [SerializeField] private GameObject[] bullet = new GameObject[3];
     private float attackTimer;
+
     [Header("Drone")]
+    public GameObject targetObject;
     [SerializeField] private GameObject[] droneGroup = new GameObject[4];
     [SerializeField] private GameObject droneBullet;
-    [SerializeField] private GameObject targetObject;
     [SerializeField] private Vector3[] dronePos = new Vector3[4]; 
     [SerializeField] private int droneCount;
 
@@ -31,6 +38,8 @@ public class Player : Entity
     }
     protected override void Start()
     {
+        for (int i = 0; i < 3; i++)
+
         base.Start();
     }
     protected override void Update()
@@ -64,10 +73,9 @@ public class Player : Entity
     {
         if (Input.GetKey(KeyCode.Space))
             attackTimer += Time.deltaTime;
-        if (Input.GetKey(KeyCode.Z))
-            Targeting();
+       
 
-        if(attackTimer >= attackSpeed)
+        if (attackTimer >= attackSpeed)
         {
             ShotBullet();
             attackTimer = 0;
@@ -109,13 +117,10 @@ public class Player : Entity
             bullet.targetObject = targetObject;
         }
     }
-    private void Targeting()
+  
+    private void Heal()
     {
-        RaycastHit target;
-        if (Physics.BoxCast(transform.position, Vector3.one, Vector3.forward, out target, transform.rotation, 100, LayerMask.GetMask("Enemy")))
-        {
-            targetObject = target.transform.gameObject;
-        }
+
     }
     public override void Hit(float hitDmg)
     {

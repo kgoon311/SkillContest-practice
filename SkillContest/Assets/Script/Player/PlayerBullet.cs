@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerBullet : Entity
 {
     [SerializeField] private float deathTimer;
-    public float dmg;
     protected override void Update()
     {
         base.Update();

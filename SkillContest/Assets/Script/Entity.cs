@@ -13,10 +13,14 @@ public abstract class Entity : MonoBehaviour
     [Header("Inspector")]
     [SerializeField]
     protected float hp;
+    protected float maxHp;
+    public float _hp { get { return hp; } set { hp = value; } }
+    public float _maxHp { get { return maxHp; } set { maxHp = value; } }
+
     [SerializeField]
     protected float speed;
+    public float dmg;
 
-    
     protected virtual void Awake()
     {
         meshRenderer = gameObject.GetComponent<Renderer>();

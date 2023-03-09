@@ -43,7 +43,7 @@ public abstract class Enemy : Entity
     {
         if (other.CompareTag("PlayerBullet"))
         {
-            float dmg = other.GetComponent<PlayerBullet>().dmg;
+            float dmg = other.GetComponent<Entity>().dmg;
             Hit(dmg);
             Destroy(other.gameObject);
         }
