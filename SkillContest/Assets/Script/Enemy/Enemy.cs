@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy : Entity
+public class Enemy : Entity
 {
     [SerializeField] protected GameObject bullet;
     [SerializeField] protected float atkSpeed;
@@ -18,11 +18,12 @@ public abstract class Enemy : Entity
     protected override void Update()
     {
         base.Update();
+        if(EntityMnager.instance.isStop == false)
         Deadtimer();
     }
     protected override void Move()
     {
-        transform.Translate(Vector3.forward  * speed *Time.deltaTime);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
     protected override void Attack()
     {
@@ -48,5 +49,9 @@ public abstract class Enemy : Entity
             Destroy(other.gameObject);
         }
     }
-    protected abstract IEnumerator AttackPattern();
+    protected virtual IEnumerator AttackPattern()
+    {
+        Instantiate(bullet, transform.position, transform.rotation);
+        yield return null; 
+    }
 }

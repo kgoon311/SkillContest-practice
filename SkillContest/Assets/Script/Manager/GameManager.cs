@@ -15,9 +15,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text score;
     [SerializeField] private Text timer;
+
     private float f_score;
     private float f_timer;
-
+    private float bossTimer;
+    private float bossTime = 90;
+    
     [Header("Skill")]
     [SerializeField] private Image[] skill = new Image[3];
     [SerializeField] private GameObject boomObject;
@@ -58,10 +61,13 @@ public class GameManager : MonoBehaviour
             skillTimer[i] += Time.deltaTime;
             skill[i].fillAmount = skillTimer[i] / coolTime[i];
         }
+        bossTimer += Time.deltaTime;
+        f_timer += Time.deltaTime;
 
         //HP,Oil
         hpSlider.value = player._hp / player._maxHp;
         oilSlider.value = player._oil / player._maxOil;
+        map.value = bossTimer / bossTime;
 
         timer.text = $"{((f_timer / 60) < 10 ? "0" : "")}{(int)(f_timer / 60)}" +
                      $" : {((f_timer % 60) < 10 ? "0":"")}{(int)(f_timer % 60)}";
