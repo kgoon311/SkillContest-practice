@@ -8,6 +8,27 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     private Player player;
+    public List<Enemy> enemys = new List<Enemy>();
+
+    [Header("Boss")]
+    [SerializeField] private GameObject[] bossObject = new GameObject[3];
+    [SerializeField] private Animation[] bossAnim = new Animation[3];
+    private Entity[]    bossScript = new Entity[3];
+    private Animator[]  bossAnimator = new Animator[3];
+
+    [SerializeField] private Vector3[] bossPos = new Vector3[3];
+
+    [SerializeField] private int bossIdx;
+    private bool bossActive;
+    [Header("BossUI")]
+    [SerializeField] private Slider bossHpbar;
+    [SerializeField] private Slider lastBossHpbar;
+    [SerializeField] private Slider lastPlayerHpBar;
+    [SerializeField] private Slider lastPlayerOilBar;
+
+    [SerializeField] private Vector2 lastSkillPos;
+
+    [SerializeField] private Vector2[] lastUiPos = new Vector2[2]; 
     [Header("UI")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider oilSlider;
@@ -20,16 +41,19 @@ public class GameManager : MonoBehaviour
     private float f_timer;
     private float bossTimer;
     private float bossTime = 90;
-    
+
     [Header("Skill")]
+    [SerializeField] private GameObject skillGroup;
     [SerializeField] private Image[] skill = new Image[3];
+
     [SerializeField] private GameObject boomObject;
     [SerializeField] private ParticleSystem boomEffect;
-    [SerializeField] private float[] coolTime = new float[3];
-    public List<Enemy> enemys = new List<Enemy>();
 
+    [SerializeField] private float[] coolTime = new float[3];
     private float[] skillTimer = new float[3];
-    private bool[] skillCoolTime = new bool[3];
+    private bool[] skillActive = new bool[3];
+
+
     private void Awake()
     {
         Instance = this; 
@@ -37,8 +61,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = Player.instance;
+        BossSetting();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -47,14 +71,31 @@ public class GameManager : MonoBehaviour
     }
     void UIUpdate()
     {
+
+        if (bossIdx == 2 && bossActive)
+        {
+            lastBossHpbar.value = bossScript[bossIdx]._hp / bossScript[bossIdx]._maxHp;
+
+            lastPlayerHpBar.value  = player._hp / player._maxHp;
+            lastPlayerOilBar.value = player._oil / player._maxOil;
+            return;
+        }
+
+        if(bossActive == true)
+        {
+            bossHpbar.value = bossScript[bossIdx]._hp / bossScript[bossIdx]._maxHp;
+        }
+        else if ((bossTimer / bossTime > 1))
+            BossSpawn();
+
         //ÄðÅ¸ÀÓ
         for (int i = 0; i < 3; i++)
         {
 
             if (skillTimer[i] > coolTime[i])
             {
-                if (skillCoolTime[i] == true)
-                    skillCoolTime[i] = false;
+                if (skillActive[i] == true)
+                    skillActive[i] = false;
                 continue;
             }
 
@@ -65,28 +106,30 @@ public class GameManager : MonoBehaviour
         f_timer += Time.deltaTime;
 
         //HP,Oil
-        hpSlider.value = player._hp / player._maxHp;
+        hpSlider.value  = player._hp / player._maxHp;
         oilSlider.value = player._oil / player._maxOil;
         map.value = bossTimer / bossTime;
-
+        
         timer.text = $"{((f_timer / 60) < 10 ? "0" : "")}{(int)(f_timer / 60)}" +
                      $" : {((f_timer % 60) < 10 ? "0":"")}{(int)(f_timer % 60)}";
         score.text = $"Score : {f_score}";
+
     }
-   
+
+    #region skill
     void Skill()
     {
-        if (Input.GetKey(KeyCode.Z) && skillCoolTime[0] == false)
+        if (Input.GetKey(KeyCode.Z) && skillActive[0] == false)
             Targeting();
-        if (Input.GetKey(KeyCode.X) && skillCoolTime[1] == false)
+        if (Input.GetKey(KeyCode.X) && skillActive[1] == false)
             Heal();
-        if (Input.GetKey(KeyCode.C) && skillCoolTime[2] == false)
+        if (Input.GetKey(KeyCode.C) && skillActive[2] == false)
             StartCoroutine(Boom());
     }
     private void Targeting()
     {
         skillTimer[0] = 0;
-        skillCoolTime[0] = true;
+        skillActive[0] = true;
 
         RaycastHit target;
         if (Physics.BoxCast(player.transform.position, Vector3.one, Vector3.forward, out target, player.transform.rotation, 100, LayerMask.GetMask("Enemy")))
@@ -98,12 +141,12 @@ public class GameManager : MonoBehaviour
     {
         skillTimer[1] = 0;
         player._hp += 5;
-        skillCoolTime[1] = true;
+        skillActive[1] = true;
     }
     private IEnumerator Boom()
     {
         skillTimer[2] = 0;
-        skillCoolTime[2] = true;
+        skillActive[2] = true;
 
         boomObject.SetActive(true); 
         boomObject.transform.position = player.transform.position; 
@@ -127,6 +170,60 @@ public class GameManager : MonoBehaviour
         }
         yield return null;
     }
+    #endregion
+    void BossSetting()
+    {
+        for(int i = 0; i < 3;i++)
+        {
+            bossScript[i] = bossObject[i].GetComponent<Entity>();
+            bossAnimator[i] = bossObject[i].GetComponent<Animator>();
+        }
+    }
+    void BossSpawn()
+    {
+        bossActive = true;
+        StartCoroutine(C_BossSpawn());
+    }
+    private IEnumerator C_BossSpawn()
+    { 
+        float whileTimer = 0;
+        bossObject[bossIdx].SetActive(true);
+
+        EntityMnager.instance.isStop = true;
+        EntityMnager.instance.isSpawnStop = true;
+
+        CameraShake(1, 3);
+        yield return new WaitForSeconds(1.1f);
+        Vector3 beforCam = Camera.main.transform.position; 
+
+        while (whileTimer < 1)
+        {
+            whileTimer += Time.deltaTime * 3;
+
+            Transform camPos = Camera.main.transform;
+            camPos.position = Vector3.Lerp(camPos.position, bossObject[bossIdx].transform.position, whileTimer);
+            yield return null; 
+        }
+
+        bossAnimator[bossIdx].SetBool("Appear", true);
+        yield return new WaitForSeconds(2);
+
+        whileTimer = 0;
+        while (whileTimer < 1)
+        {
+            whileTimer += Time.deltaTime * 3;
+
+            Transform camPos = Camera.main.transform;
+            camPos.position = Vector3.Lerp(camPos.position, beforCam, whileTimer);
+
+            yield return null;
+        }
+
+        EntityMnager.instance.isStop = false;
+        EntityMnager.instance.isSpawnStop = false;
+        yield return null;
+    }
+
     public void CameraShake(float shakeTime, float shakePower)
     {
         StartCoroutine(C_CameraShake(shakeTime, shakePower));
