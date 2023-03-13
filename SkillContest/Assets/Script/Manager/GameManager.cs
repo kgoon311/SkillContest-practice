@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,23 +13,26 @@ public class GameManager : MonoBehaviour
 
     [Header("Boss")]
     [SerializeField] private GameObject[] bossObject = new GameObject[3];
-    [SerializeField] private Animation[] bossAnim = new Animation[3];
-    private Entity[]    bossScript = new Entity[3];
-    private Animator[]  bossAnimator = new Animator[3];
-
-    [SerializeField] private Vector3[] bossPos = new Vector3[3];
+    private Entity[] bossScript = new Entity[3];
+    private Animator[] bossAnimator = new Animator[3];
 
     [SerializeField] private int bossIdx;
     private bool bossActive;
     [Header("BossUI")]
+    [SerializeField] private GameObject warningGroup;
+    [SerializeField] private GameObject[] warningText = new GameObject[2];
+
+    [Space(10)]
     [SerializeField] private Slider bossHpbar;
-    [SerializeField] private Slider lastBossHpbar;
     [SerializeField] private Slider lastPlayerHpBar;
     [SerializeField] private Slider lastPlayerOilBar;
+    [SerializeField] private Vector2 lastHpPos;
+    [SerializeField] private GameObject lastHpGroup;
 
+    [Space(10)]
     [SerializeField] private Vector2 lastSkillPos;
-
-    [SerializeField] private Vector2[] lastUiPos = new Vector2[2]; 
+    [SerializeField] private Vector2[] lastUiPos = new Vector2[2];
+    [SerializeField] private GameObject[] lastUiObjects = new GameObject[2];
     [Header("UI")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider oilSlider;
@@ -56,12 +60,14 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this; 
+        Instance = this;
     }
     void Start()
     {
+        
         player = Player.instance;
-        BossSetting();
+
+        //BossSetting();
     }
     // Update is called once per frame
     void Update()
@@ -74,14 +80,12 @@ public class GameManager : MonoBehaviour
 
         if (bossIdx == 2 && bossActive)
         {
-            lastBossHpbar.value = bossScript[bossIdx]._hp / bossScript[bossIdx]._maxHp;
-
-            lastPlayerHpBar.value  = player._hp / player._maxHp;
+            lastPlayerHpBar.value = player._hp / player._maxHp;
             lastPlayerOilBar.value = player._oil / player._maxOil;
             return;
         }
 
-        if(bossActive == true)
+        if (bossActive == true)
         {
             bossHpbar.value = bossScript[bossIdx]._hp / bossScript[bossIdx]._maxHp;
         }
@@ -106,12 +110,12 @@ public class GameManager : MonoBehaviour
         f_timer += Time.deltaTime;
 
         //HP,Oil
-        hpSlider.value  = player._hp / player._maxHp;
+        hpSlider.value = player._hp / player._maxHp;
         oilSlider.value = player._oil / player._maxOil;
         map.value = bossTimer / bossTime;
-        
+
         timer.text = $"{((f_timer / 60) < 10 ? "0" : "")}{(int)(f_timer / 60)}" +
-                     $" : {((f_timer % 60) < 10 ? "0":"")}{(int)(f_timer % 60)}";
+                     $" : {((f_timer % 60) < 10 ? "0" : "")}{(int)(f_timer % 60)}";
         score.text = $"Score : {f_score}";
 
     }
@@ -148,15 +152,15 @@ public class GameManager : MonoBehaviour
         skillTimer[2] = 0;
         skillActive[2] = true;
 
-        boomObject.SetActive(true); 
-        boomObject.transform.position = player.transform.position; 
+        boomObject.SetActive(true);
+        boomObject.transform.position = player.transform.position;
 
         float timer = 0;
-        while(timer < 1)
+        while (timer < 1)
         {
             timer += Time.deltaTime;
             boomObject.transform.position += Vector3.forward * Time.deltaTime * 10;
-            yield return null; 
+            yield return null;
         }
 
         boomObject.SetActive(false);
@@ -173,7 +177,7 @@ public class GameManager : MonoBehaviour
     #endregion
     void BossSetting()
     {
-        for(int i = 0; i < 3;i++)
+        for (int i = 0; i < 3; i++)
         {
             bossScript[i] = bossObject[i].GetComponent<Entity>();
             bossAnimator[i] = bossObject[i].GetComponent<Animator>();
@@ -185,63 +189,120 @@ public class GameManager : MonoBehaviour
         StartCoroutine(C_BossSpawn());
     }
     private IEnumerator C_BossSpawn()
-    { 
-        float whileTimer = 0;
+    {
         bossObject[bossIdx].SetActive(true);
 
         EntityMnager.instance.isStop = true;
         EntityMnager.instance.isSpawnStop = true;
+        StartCoroutine(ActiveWarningText(4f)) ;
+        CameraShake(4, 1);
 
-        CameraShake(1, 3);
-        yield return new WaitForSeconds(1.1f);
-        Vector3 beforCam = Camera.main.transform.position; 
+        yield return new WaitForSeconds(4f);
 
-        while (whileTimer < 1)
-        {
-            whileTimer += Time.deltaTime * 3;
+        Vector3 beforCam = Camera.main.transform.position;
+        StartCoroutine(CameraMove(bossObject[bossIdx].transform.position + Vector3.up * 10, 1));
 
-            Transform camPos = Camera.main.transform;
-            camPos.position = Vector3.Lerp(camPos.position, bossObject[bossIdx].transform.position, whileTimer);
-            yield return null; 
-        }
+        yield return new WaitForSeconds(1);
 
-        bossAnimator[bossIdx].SetBool("Appear", true);
+        // bossAnimator[bossIdx].SetBool("Appear", true);
+
         yield return new WaitForSeconds(2);
 
-        whileTimer = 0;
-        while (whileTimer < 1)
-        {
-            whileTimer += Time.deltaTime * 3;
+        StartCoroutine(CameraMove(beforCam, 1));
 
-            Transform camPos = Camera.main.transform;
-            camPos.position = Vector3.Lerp(camPos.position, beforCam, whileTimer);
-
-            yield return null;
-        }
+        yield return new WaitForSeconds(1);
 
         EntityMnager.instance.isStop = false;
         EntityMnager.instance.isSpawnStop = false;
+
+        bossHpbar.gameObject.SetActive(true);
+        bossHpbar.transform.localPosition += Vector3.down * 100;
+        float timer = 0;
+
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            bossHpbar.transform.position = Vector3.Lerp(bossHpbar.transform.position, Vector3.zero, timer);
+            yield return null; 
+        }
+
+        if (bossIdx == 2)
+        {
+            timer = 0;
+            while (timer < 1)
+            {
+                timer += Time.deltaTime * 3;
+                for (int i = 0; i < 2; i++)
+                {
+                    lastUiObjects[i].transform.position = Vector3.Lerp(lastUiObjects[i].transform.localPosition, lastUiPos[i], timer);
+                    bossHpbar.transform.localScale = Vector3.Lerp(bossHpbar.transform.localScale, new Vector3(1, 1.5f, 1), timer);
+                }
+                yield return null;
+            }
+
+            timer = 0;
+            while (timer < 1)
+            {
+                timer += Time.deltaTime * 3;
+                skillGroup.transform.position = Vector3.Lerp(skillGroup.transform.localPosition, lastSkillPos, timer);
+                lastHpGroup.transform.position = Vector3.Lerp(lastHpGroup.transform.localPosition, lastHpPos, timer);
+
+                yield return null;
+            }
+
+            bossHpbar.transform.localScale = Vector3.one * 1.5f;
+
+        }
         yield return null;
     }
+    private IEnumerator ActiveWarningText(float time)
+    {
+        float timer = time;
+        warningGroup.SetActive(true);
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            for (int i = 0; i < 2; i++)
+            {
+                warningText[i].transform.localPosition += Vector3.left * Time.deltaTime * 300;
+                if (warningText[i].transform.localPosition.x < -300)
+                    warningText[i].transform.localPosition += Vector3.right * 600;
+            }
+            yield return null;
+        }
+        warningGroup.SetActive(false);
+    }
+    private IEnumerator CameraMove(Vector3 pos, float time)
+    {
+        float whileTimer = 0;
+        while (whileTimer < time)
+        {
+            whileTimer += Time.deltaTime;
 
+            Transform camPos = Camera.main.transform;
+            camPos.position = Vector3.Lerp(camPos.position, pos, whileTimer);
+
+            yield return null;
+        }
+    }
     public void CameraShake(float shakeTime, float shakePower)
     {
         StartCoroutine(C_CameraShake(shakeTime, shakePower));
     }
-    private IEnumerator C_CameraShake(float shakeTime , float shakePower)
+    private IEnumerator C_CameraShake(float shakeTime, float shakePower)
     {
         Vector3 beforePos = Camera.main.transform.position;
 
         float timer = 0;
-        while(timer < shakeTime)
+        while (timer < shakeTime)
         {
             timer += Time.deltaTime;
-            Camera.main.transform.position = new Vector3(beforePos.x + Random.Range(0.5f, shakePower),beforePos.y, 
+            Camera.main.transform.position = new Vector3(beforePos.x + Random.Range(0.5f, shakePower), beforePos.y,
                                                          beforePos.z + Random.Range(0.5f, shakePower));
             yield return null;
         }
 
         Camera.main.transform.position = beforePos;
-        yield return null;  
+        yield return null;
     }
 }
