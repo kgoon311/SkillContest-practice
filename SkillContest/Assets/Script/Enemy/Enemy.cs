@@ -13,6 +13,7 @@ public class Enemy : Entity
     protected override void Start()
     {
         base.Start();
+        GameManager.Instance.enemys.Add(this); 
     }
 
     protected override void Update()

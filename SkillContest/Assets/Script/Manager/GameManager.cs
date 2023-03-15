@@ -26,13 +26,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider bossHpbar;
     [SerializeField] private Slider lastPlayerHpBar;
     [SerializeField] private Slider lastPlayerOilBar;
-    [SerializeField] private Vector2 lastHpPos;
-    [SerializeField] private GameObject lastHpGroup;
+    [SerializeField] private Vector3 lastHpPos;
+    [SerializeField] private RectTransform lastHpGroup;
 
     [Space(10)]
-    [SerializeField] private Vector2 lastSkillPos;
-    [SerializeField] private Vector2[] lastUiPos = new Vector2[2];
-    [SerializeField] private GameObject[] lastUiObjects = new GameObject[2];
+    [SerializeField] private Vector3 lastSkillPos;
+    [SerializeField] private Vector3[] lastUiPos = new Vector3[2];
+    [SerializeField] private RectTransform[] lastUiObjects = new RectTransform[2];
     [Header("UI")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider oilSlider;
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     private float bossTime = 90;
 
     [Header("Skill")]
-    [SerializeField] private GameObject skillGroup;
+    [SerializeField] private RectTransform skillGroup;
     [SerializeField] private Image[] skill = new Image[3];
 
     [SerializeField] private GameObject boomObject;
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     {
         
         player = Player.instance;
-
+        BossSpawn();
         //BossSetting();
     }
     // Update is called once per frame
@@ -212,30 +212,27 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        EntityMnager.instance.isStop = false;
-        EntityMnager.instance.isSpawnStop = false;
-
         bossHpbar.gameObject.SetActive(true);
-        bossHpbar.transform.localPosition += Vector3.down * 100;
         float timer = 0;
 
         while (timer < 1)
         {
             timer += Time.deltaTime;
-            bossHpbar.transform.position = Vector3.Lerp(bossHpbar.transform.position, Vector3.zero, timer);
+            bossHpbar.transform.localPosition = Vector3.Lerp(bossHpbar.transform.localPosition, new Vector3(0,70,0) , timer);
             yield return null; 
         }
 
         if (bossIdx == 2)
         {
+            Debug.Log("?");
             timer = 0;
             while (timer < 1)
             {
-                timer += Time.deltaTime * 3;
+                timer += Time.deltaTime / 2;
                 for (int i = 0; i < 2; i++)
                 {
-                    lastUiObjects[i].transform.position = Vector3.Lerp(lastUiObjects[i].transform.localPosition, lastUiPos[i], timer);
-                    bossHpbar.transform.localScale = Vector3.Lerp(bossHpbar.transform.localScale, new Vector3(1, 1.5f, 1), timer);
+                    lastUiObjects[i].anchoredPosition = Vector3.Lerp(lastUiObjects[i].anchoredPosition, lastUiPos[i], timer);
+                    bossHpbar.transform.localScale = Vector3.Lerp(bossHpbar.transform.localScale, new Vector3(1.5f, 1, 1), timer);
                 }
                 yield return null;
             }
@@ -243,16 +240,15 @@ public class GameManager : MonoBehaviour
             timer = 0;
             while (timer < 1)
             {
-                timer += Time.deltaTime * 3;
-                skillGroup.transform.position = Vector3.Lerp(skillGroup.transform.localPosition, lastSkillPos, timer);
-                lastHpGroup.transform.position = Vector3.Lerp(lastHpGroup.transform.localPosition, lastHpPos, timer);
+                timer += Time.deltaTime / 2;
+                skillGroup.anchoredPosition  = Vector3.Lerp(skillGroup.anchoredPosition, lastSkillPos, timer);
+                lastHpGroup.anchoredPosition = Vector3.Lerp(lastHpGroup.anchoredPosition, lastHpPos, timer);
 
                 yield return null;
             }
-
-            bossHpbar.transform.localScale = Vector3.one * 1.5f;
-
         }
+        EntityMnager.instance.isStop = false;
+        EntityMnager.instance.isSpawnStop = false;
         yield return null;
     }
     private IEnumerator ActiveWarningText(float time)

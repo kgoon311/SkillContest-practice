@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour
 {
     protected Renderer meshRenderer;
-    public Material hitMaterial;
+    protected Material hitMaterial;
 
     private bool isPlayingHitAnim;
     public bool isInvi;
