@@ -12,10 +12,10 @@ public class Boss : Entity
     protected float atkTimer;
     protected int patternCount;
 
-    [SerializeField] private ParticleSystem deadParticle;
-    private Vector3 beforePos;
-    private Vector3 movePos = new Vector3(0, 0, 13);
-    private float moveTimer = 0;
+    [SerializeField] protected ParticleSystem deadParticle;
+    protected Vector3 beforePos;
+    protected Vector3 movePos = new Vector3(0, 0, 13);
+    protected float moveTimer = 0;
     
     protected override void Awake()
     {
