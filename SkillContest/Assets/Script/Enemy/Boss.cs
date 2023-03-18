@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class Boss : Entity
 {
-    [SerializeField] private GameObject bullet;
+    
     [SerializeField] protected float atkSpeed;
+    [SerializeField] protected int patternCount;
     protected float atkTimer;
-    protected int patternCount;
 
     [SerializeField] protected ParticleSystem deadParticle;
     protected Vector3 beforePos;

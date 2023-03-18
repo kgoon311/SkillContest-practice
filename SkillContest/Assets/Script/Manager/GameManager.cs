@@ -66,8 +66,8 @@ public class GameManager : MonoBehaviour
     {
         
         player = Player.instance;
+        BossSetting();
         BossSpawn();
-        //BossSetting();
     }
     // Update is called once per frame
     void Update()
@@ -199,8 +199,8 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
 
-        Vector3 beforCam = Camera.main.transform.position;
-        StartCoroutine(CameraMove(bossObject[bossIdx].transform.position + Vector3.up * 10, 1));
+        Vector3 beforeCam = Camera.main.transform.position;
+        StartCoroutine(CameraMove(bossObject[bossIdx].transform.position + Vector3.up * 20, 1));
 
         yield return new WaitForSeconds(1);
 
@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        StartCoroutine(CameraMove(beforCam, 1));
+        StartCoroutine(CameraMove(beforeCam, 1));
 
         yield return new WaitForSeconds(1);
 

@@ -131,7 +131,7 @@ public class Player : Entity
     {
         if (other.CompareTag("EnemyBullet"))
         {
-            float dmg = other.GetComponent<EnemyBullet>().dmg;
+            float dmg = other.GetComponent<Entity>().dmg;
             Hit(dmg);
 
             Destroy(other.gameObject);

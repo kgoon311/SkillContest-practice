@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1040033888305402841}
   - component: {fileID: 557382060134484265}
+  - component: {fileID: 4968376549698734850}
+  - component: {fileID: 5225526888223814765}
   m_Layer: 0
   m_Name: Warigari
   m_TagString: Untagged
@@ -47,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e241bd2fa77bda40b85108ea9976689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitMaterial: {fileID: 0}
   isInvi: 0
   hp: 10
   speed: 15
@@ -55,6 +56,36 @@ MonoBehaviour:
   deathTimer: 5
   turnValue: 90
   turnTime: 0.5
+--- !u!136 &4968376549698734850
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164457902629859902}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.77
+  m_Height: 3.96
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5225526888223814765
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164457902629859902}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4784801846340689501
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,7 +99,6 @@ GameObject:
   - component: {fileID: 7977503809666335912}
   - component: {fileID: 380047451162966012}
   - component: {fileID: 7810021704001656316}
-  - component: {fileID: 9185039387985689389}
   m_Layer: 0
   m_Name: Prism
   m_TagString: Untagged
@@ -348,20 +378,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4784801846340689501}
   m_Mesh: {fileID: 0}
---- !u!64 &9185039387985689389
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4784801846340689501}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &5398057075558424347
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +391,6 @@ GameObject:
   - component: {fileID: 1394988185917164193}
   - component: {fileID: 7861188459768396143}
   - component: {fileID: 3783192155728330123}
-  - component: {fileID: 459604249951578179}
   m_Layer: 0
   m_Name: Prism (1)
   m_TagString: Untagged
@@ -655,20 +670,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5398057075558424347}
   m_Mesh: {fileID: 0}
---- !u!64 &459604249951578179
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5398057075558424347}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7486868041557806275
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,7 +683,6 @@ GameObject:
   - component: {fileID: 106067706261764149}
   - component: {fileID: 4717219254254468374}
   - component: {fileID: 9108344194091681760}
-  - component: {fileID: 2466883135876786360}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -998,18 +998,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7486868041557806275}
-  m_Mesh: {fileID: 0}
---- !u!64 &2466883135876786360
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7486868041557806275}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}

@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class firstBossTurret : Boss
+public class firstBossTurret : Entity
 {
+    [SerializeField] private ParticleSystem deadParticle;
     [SerializeField] private ParticleSystem turretDeadParticle;
+    public GameObject[] shotPos = new GameObject[2];
     public bool isDie;
     protected override void Update()
     {
+        if(isDie == false)
+            base.Update();
         if (hp <= 0 && isDie == false)
         {
             hp = 0;
@@ -15,7 +19,7 @@ public class firstBossTurret : Boss
             isDie = true; 
         }
     }
-    protected override IEnumerator Dead()
+    protected IEnumerator Dead()
     {
         deadParticle.Play();
         isInvi = true;
@@ -23,6 +27,7 @@ public class firstBossTurret : Boss
     }
     protected override void Move()
     {
+        transform.LookAt(Player.instance.transform.position);
     }
     protected override void Attack()
     {
