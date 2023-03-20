@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -12,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Boss")]
     [SerializeField] private GameObject[] bossObject = new GameObject[3];
+    [SerializeField] private Vector3 bossCameraPos;
+    [SerializeField] private Quaternion bossCameraRotate;
+
     private Entity[] bossScript = new Entity[3];
     private Animator[] bossAnimator = new Animator[3];
 
@@ -39,6 +43,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text score;
     [SerializeField] private Text timer;
+    [SerializeField] private Text[] skillCoolTime;
+    private Color[] coolTextColor = new Color[2];
 
     private float f_score;
     private float f_timer;
@@ -56,17 +62,25 @@ public class GameManager : MonoBehaviour
     private float[] skillTimer = new float[3];
     private bool[] skillActive = new bool[3];
 
-    private Vector3 beforePos;
+    private Vector3 beforeCameraPos;
+    private Quaternion beforeCameraRotate;
 
+    private Coroutine skillText;
     private void Awake()
     {
         Instance = this;
-        beforePos = Camera.main.transform.position;
+        beforeCameraPos = Camera.main.transform.position;
+        beforeCameraRotate = Camera.main.transform.rotation;
+        for (int i = 0; i < 2; i++)
+        { 
+            coolTextColor[i] = skillCoolTime[i].color;
+        }
     }
     void Start()
     {
         player = Player.instance;
         BossSetting();
+        BossSpawn();
     }
     // Update is called once per frame
     void Update()
@@ -99,7 +113,9 @@ public class GameManager : MonoBehaviour
             if (skillTimer[i] > coolTime[i])
             {
                 if (skillActive[i] == true)
+                {
                     skillActive[i] = false;
+                }
                 continue;
             }
 
@@ -123,12 +139,52 @@ public class GameManager : MonoBehaviour
     #region skill
     void Skill()
     {
-        if (Input.GetKey(KeyCode.Z) && skillActive[0] == false)
+        if (Input.GetKeyDown(KeyCode.Z) && skillActive[0] == false)
             Targeting();
-        if (Input.GetKey(KeyCode.X) && skillActive[1] == false)
-            Heal();
-        if (Input.GetKey(KeyCode.C) && skillActive[2] == false)
-            StartCoroutine(Boom());
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (skillActive[1] == false)
+                Heal();
+            else
+                CoolTimeText();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (skillActive[2] == false)
+                StartCoroutine(Boom());
+            else
+                CoolTimeText();
+        }
+            
+    }
+    private void CoolTimeText()
+    {
+        if (skillText != null)
+            StopCoroutine(SkillCoolText());
+
+        skillText = StartCoroutine(SkillCoolText());
+    }
+    private IEnumerator SkillCoolText()
+    {
+
+        skillCoolTime[0].color = coolTextColor[0] + new Color(0, 0, 0, 1);
+        skillCoolTime[1].color = coolTextColor[1] + new Color(0, 0, 0, 1);
+        yield return new WaitForSeconds(0.5f);
+
+        float timer = 1;
+        while(timer > 0)
+        {
+            timer -= Time.deltaTime * 3;
+            for (int i = 0; i < 2; i++)
+            {
+                skillCoolTime[i].color = coolTextColor[i] + new Color(0, 0, 0, timer);
+            }
+            yield return null;
+        }
+
+        skillCoolTime[0].color = coolTextColor[0] + new Color(0, 0, 0, 0);
+        skillCoolTime[1].color = coolTextColor[1] + new Color(0, 0, 0, 0);
+        yield return null;
     }
     private void Targeting()
     {
@@ -199,16 +255,15 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
 
-        Vector3 beforeCam = Camera.main.transform.position;
-        StartCoroutine(CameraMove(bossObject[bossIdx].transform.position + Vector3.up * 20, 1));
+        StartCoroutine(CameraMove(bossCameraPos, bossCameraRotate , 2));
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2f);
 
         // bossAnimator[bossIdx].SetBool("Appear", true);
 
         yield return new WaitForSeconds(2);
 
-        StartCoroutine(CameraMove(beforeCam, 1));
+        StartCoroutine(CameraMove(beforeCameraPos , beforeCameraRotate, 1));
 
         yield return new WaitForSeconds(1);
 
@@ -268,16 +323,16 @@ public class GameManager : MonoBehaviour
         }
         warningGroup.SetActive(false);
     }
-    private IEnumerator CameraMove(Vector3 pos, float time)
+    private IEnumerator CameraMove(Vector3 pos,Quaternion rotate, float time)
     {
         float whileTimer = 0;
-        while (whileTimer < time)
+        while (whileTimer < 1)
         {
-            whileTimer += Time.deltaTime;
+            whileTimer += Time.deltaTime / time;
 
             Transform camPos = Camera.main.transform;
             camPos.position = Vector3.Lerp(camPos.position, pos, whileTimer);
-
+            camPos.rotation = Quaternion.Lerp(camPos.rotation,rotate, whileTimer);
             yield return null;
         }
     }
@@ -291,12 +346,12 @@ public class GameManager : MonoBehaviour
         while (timer < shakeTime)
         {
             timer += Time.deltaTime;
-            Camera.main.transform.position = new Vector3(beforePos.x + Random.Range(0.5f, shakePower), beforePos.y,
-                                                         beforePos.z + Random.Range(0.5f, shakePower));
+            Camera.main.transform.position = new Vector3(beforeCameraPos.x + Random.Range(0.5f, shakePower), beforeCameraPos.y,
+                                                         beforeCameraPos.z + Random.Range(0.5f, shakePower));
             yield return null;
         }
 
-        Camera.main.transform.position = beforePos;
+        Camera.main.transform.position = beforeCameraPos;
         yield return null;
     }
 }
