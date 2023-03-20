@@ -118,13 +118,11 @@ public class Player : Entity
         }
     }
   
-    private void Heal()
-    {
-
-    }
     public override void Hit(float hitDmg)
     {
         base.Hit(hitDmg);
+        if(isInvi == false)
+            GameManager.Instance.CameraShake(0.5f, 1);
         Invi(inviTime);
     }
     private void OnTriggerEnter(Collider other)

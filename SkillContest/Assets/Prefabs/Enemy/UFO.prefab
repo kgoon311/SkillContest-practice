@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3892998883213609197}
   m_Layer: 0
   m_Name: UFO
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,15 +47,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64d5f7207a7096f478dc9a4b57d4e3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitMaterial: {fileID: 0}
   isInvi: 0
   hp: 100
   speed: 4
+  dmg: 0
   bullet: {fileID: 6344734081677408948, guid: f8765bbd6ede9624c87461b9b907d8db, type: 3}
   atkSpeed: 1
   deathTimer: 10
   rotationSpeed: 100
   shootCount: 8
+  shotPattern: 0
 --- !u!23 &3892998883213609197
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -41,15 +41,7 @@ public class Enemy : Entity
         if (deathTimer < 0)
             Destroy(gameObject);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("PlayerBullet"))
-        {
-            float dmg = other.GetComponent<Entity>().dmg;
-            Hit(dmg);
-            Destroy(other.gameObject);
-        }
-    }
+  
     protected virtual IEnumerator AttackPattern()
     {
         Instantiate(bullet, transform.position, transform.rotation);

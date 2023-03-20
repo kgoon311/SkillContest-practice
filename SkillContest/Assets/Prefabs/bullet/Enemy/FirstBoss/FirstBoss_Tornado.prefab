@@ -307,8 +307,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 1
+  maxHp: 0
   speed: 5
-  dmg: 10
+  dmg: 1
   bullet: {fileID: 6179792245108930222, guid: 02a59dabb039c1842b27b3ce6c696739, type: 3}
   atkSpeed: 2
   deathTimer: 5

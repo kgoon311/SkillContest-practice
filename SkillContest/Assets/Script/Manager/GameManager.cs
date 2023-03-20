@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class GameManager : MonoBehaviour
     private Animator[] bossAnimator = new Animator[3];
 
     [SerializeField] private int bossIdx;
-    private bool bossActive;
+    public bool bossActive;
     [Header("BossUI")]
     [SerializeField] private GameObject warningGroup;
     [SerializeField] private GameObject[] warningText = new GameObject[2];
@@ -57,27 +56,28 @@ public class GameManager : MonoBehaviour
     private float[] skillTimer = new float[3];
     private bool[] skillActive = new bool[3];
 
+    private Vector3 beforePos;
 
     private void Awake()
     {
         Instance = this;
+        beforePos = Camera.main.transform.position;
     }
     void Start()
     {
-        
         player = Player.instance;
         BossSetting();
-        BossSpawn();
     }
     // Update is called once per frame
     void Update()
     {
         UIUpdate();
-        Skill();
+
+        if(EntityMnager.instance.isStop == false)
+            Skill();
     }
     void UIUpdate()
     {
-
         if (bossIdx == 2 && bossActive)
         {
             lastPlayerHpBar.value = player._hp / player._maxHp;
@@ -287,8 +287,6 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator C_CameraShake(float shakeTime, float shakePower)
     {
-        Vector3 beforePos = Camera.main.transform.position;
-
         float timer = 0;
         while (timer < shakeTime)
         {

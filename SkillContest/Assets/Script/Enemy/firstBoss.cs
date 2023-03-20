@@ -101,31 +101,27 @@ public class firstBoss : Boss
 
         while (timer < time)
         {
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * 10;
 
 
             for (int i = 0; i < 2; i++)
             {
                 Vector3 shotPos = turrets[turretIdx].shotPos[i].transform.position;
-                Vector3 dir =Player.instance.transform.position - shotPos;
+                Vector3 dir = Player.instance.transform.position - shotPos;
                 Quaternion lookRotate = Quaternion.LookRotation(dir);
 
                 randomRotete = Random.Range(-30f, 30f);
-                rotation = Quaternion.Euler(new Vector3(0, lookRotate.y + randomRotete, 0));
+                rotation = Quaternion.Euler(new Vector3(0, lookRotate.eulerAngles.y + randomRotete, 0));
 
                 Instantiate(bullet[0], shotPos, rotation);
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.5f);
         }
     }
     private IEnumerator TornadoAttack(int turretIdx, int bulletType, float time)
     {
-        for (int i = 0; i < 2; i++)
-        {
-            Transform shotPos = turrets[turretIdx].transform;
-            Instantiate(bullet[bulletType], shotPos.position, shotPos.rotation);
-            yield return new WaitForSeconds(1);
-        }
+        Transform shotPos = turrets[turretIdx].transform;
+        Instantiate(bullet[bulletType], shotPos.position, shotPos.rotation);
         yield return null;
     }
 }

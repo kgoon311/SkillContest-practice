@@ -53,6 +53,7 @@ public class Boss : Entity
 
         yield return new WaitForSeconds(1.5f);
 
+        GameManager.Instance.bossActive = false;
         gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)

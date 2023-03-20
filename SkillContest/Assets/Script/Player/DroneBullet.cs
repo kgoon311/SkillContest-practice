@@ -35,4 +35,13 @@ public class DroneBullet : Entity
     {
 
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Entity script = other.GetComponent<Entity>();
+            script.Hit(dmg);
+            Destroy(gameObject);
+        }
+    }
 }

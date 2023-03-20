@@ -51,8 +51,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 10
+  maxHp: 0
   speed: 15
-  dmg: 10
+  dmg: 1
   deathTimer: 5
   turnValue: 90
   turnTime: 0.5

@@ -11181,10 +11181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 10
+  maxHp: 10
   speed: 10
   dmg: 0
   oil: 10
-  maxOil: 0
+  maxOil: 10
   inviTime: 0
   moveRimite:
   - {x: -5.5, y: -4}
@@ -18494,6 +18495,7 @@ MonoBehaviour:
   - {fileID: 1121854185}
   - {fileID: 1121854185}
   bossIdx: 0
+  bossActive: 0
   warningGroup: {fileID: 673364453}
   warningText:
   - {fileID: 1303870279}
@@ -72378,7 +72380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1121854186
 Transform:
   m_ObjectHideFlags: 0
@@ -72408,9 +72410,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 1
+  maxHp: 0
   speed: 0
   dmg: 0
-  atkSpeed: 4
+  atkSpeed: 5
   patternCount: 5
   deadParticle: {fileID: 0}
   turret: {fileID: 2350028821972636979, guid: 692ba7e7f42227644996840ac492f738, type: 3}

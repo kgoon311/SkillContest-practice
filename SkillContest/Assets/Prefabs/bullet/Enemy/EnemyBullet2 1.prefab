@@ -37437,11 +37437,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26d3b959beb2fc499c9bc27372092d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitMaterial: {fileID: 0}
   isInvi: 0
   hp: 1
+  maxHp: 0
   speed: 3
-  dmg: 10
+  dmg: 0
   deathTimer: 5
   bullet: {fileID: 6344734081677408948, guid: f8765bbd6ede9624c87461b9b907d8db, type: 3}
   boomtimes:

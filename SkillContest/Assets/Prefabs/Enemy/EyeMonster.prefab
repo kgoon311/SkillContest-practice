@@ -9924,7 +9924,7 @@ GameObject:
   - component: {fileID: -7461148440414614182}
   m_Layer: 7
   m_Name: EyeMonster
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9957,10 +9957,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d539174c11bc784b8eb30503df0896c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitMaterial: {fileID: 0}
   isInvi: 0
   hp: 100
   speed: 3
+  dmg: 0
   bullet: {fileID: 2988452854028321796, guid: c8369938c7f27eb4a8a9789bbfc09d2b, type: 3}
   atkSpeed: 1
   deathTimer: 10
