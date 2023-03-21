@@ -11,15 +11,7 @@ public class firstBoss : Boss
     [SerializeField] private GameObject turret;
     [SerializeField] private Vector3[] spawnPos;
     private firstBossTurret[] turrets = new firstBossTurret[2];
-
-    /// <summary>
-    /// 0 : nomal
-    /// 1 : homing
-    /// 2 : ufo
-    /// 3 : 360
-    /// 4 : random 360
-    /// </summary>
-    [SerializeField] private GameObject[] bullet;
+   
     protected override void Start()
     {
         for (int i = 0; i < 2; i++)
@@ -46,6 +38,14 @@ public class firstBoss : Boss
             if (turrets[i].isDie == true)
                 continue;
 
+            /// <summary>
+            /// bullets
+            /// 0 : nomal
+            /// 1 : homing
+            /// 2 : ufo
+            /// 3 : 360
+            /// 4 : random 360
+            /// </summary>
             switch (attackCount)
             {
                 case 0:

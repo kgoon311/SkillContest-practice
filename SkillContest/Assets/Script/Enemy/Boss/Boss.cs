@@ -16,7 +16,9 @@ public class Boss : Entity
     protected Vector3 beforePos;
     protected Vector3 movePos = new Vector3(0, 0, 13);
     protected float moveTimer = 0;
-    
+
+    [SerializeField] protected GameObject[] bullet;
+
     protected override void Awake()
     {
         base.Awake();
