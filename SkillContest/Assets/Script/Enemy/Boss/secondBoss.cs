@@ -11,7 +11,7 @@ public class secondBoss : Boss
     [SerializeField] private GameObject[] drone;
     [SerializeField] private Vector3[] droneStartPos;
     [SerializeField] private Vector3[] droneEndPos;
-    
+
     [Header("LaserInspector")]
     [SerializeField] private Material laserColor;
     [SerializeField] private LayerMask playerLayerMask;
@@ -22,6 +22,14 @@ public class secondBoss : Boss
     {
         playerLayerMask = LayerMask.GetMask("Player");
         base.Start();
+    }
+    protected override void Update()
+    {
+        transform.LookAt(Player.instance.transform.position);
+        for (int i = 0; i < 6; i++)
+            drone[i + 6].transform.LookAt(Player.instance.transform.position);
+
+        base.Update();
     }
     protected override IEnumerator AttackPattern()
     {
@@ -35,7 +43,8 @@ public class secondBoss : Boss
         /// <summary>
         /// bullets
         /// 0 : waringLine
-        /// 1 : layerBoom
+        /// 1 : grenade
+        /// 2 : spinBall
         /// </summary>
         /// 
         switch (attackCount)
@@ -55,6 +64,16 @@ public class secondBoss : Boss
                     StartCoroutine(DroneAttack2());
                     break;
                 }
+            case 3:
+                {
+                    Grenade();
+                    break;
+                }
+            case 4:
+                {
+                    SpinAttack();
+                    break;
+                }
         }
 
 
@@ -69,7 +88,7 @@ public class secondBoss : Boss
 
         for (int i = 0; i < 2; i++)
         {
-            shotPos[i].transform.localRotation = Quaternion.LookRotation(shotPos[i].transform.position,Player.instance.transform.position);
+            shotPos[i].transform.localRotation = Quaternion.LookRotation(shotPos[i].transform.position, Player.instance.transform.position);
             shotPos[i].transform.localRotation = Quaternion.Euler(new Vector3(0, shotPos[i].transform.localRotation.eulerAngles.y - 60f, 0));
             for (int j = 0; j < 3; j++)
             {
@@ -140,23 +159,37 @@ public class secondBoss : Boss
             timer -= Time.deltaTime * 2;
             for (int i = 0; i < 6; i++)
             {
-                drone[i+6].transform.position = Vector3.Lerp(droneStartPos[i], droneEndPos[i], timer);
+                drone[i + 6].transform.position = Vector3.Lerp(droneStartPos[i], droneEndPos[i], timer);
             }
             yield return null;
         }
 
         yield break;
     }
+    protected void SpinAttack()
+    {
+        Instantiate(bullet[2], transform.position, transform.rotation);
+    }
     protected void Grenade()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            shotPos[i].transform.rotation = Quaternion.Euler(0, 180, 0);
-            Instantiate(bullet[1], shotPos[i].transform.position, shotPos[0].transform.rotation);
-        }
+        transform.rotation = Quaternion.Euler(0, 180, 0);
+        Grenade grenade =  Instantiate(bullet[1], transform.position, transform.rotation).GetComponent<Grenade>();
+        grenade.secondBoss = this;
     }
 
-    protected IEnumerator DrawLaser(Vector3 startPos, Vector3 endPos)
+    public IEnumerator DrawWaringLine(Vector3 pos, Quaternion rotation)
+    {
+        GameObject lineObeject;
+
+        lineObeject = Instantiate(bullet[0], pos, rotation);
+        lineObeject.GetComponent<Rigidbody>().velocity = lineObeject.transform.forward * waringLineDrawSpeed;
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(DrawLaser(pos, lineObeject.transform.position));
+        Destroy(lineObeject);
+        yield return null;
+    }
+    public IEnumerator DrawLaser(Vector3 startPos, Vector3 endPos)
     {
 
         LineRenderer line = new GameObject("layer").AddComponent<LineRenderer>();
@@ -168,10 +201,10 @@ public class secondBoss : Boss
         Quaternion rotate = Quaternion.LookRotation(startPos, endPos);
 
         float timer = 0;
-        while(timer < 1)
+        while (timer < 1)
         {
             timer += Time.deltaTime;
-            line.SetWidth(timer,timer * 2f);
+            line.SetWidth(timer, timer * 2f);
             if (Physics.BoxCast(startPos, Vector3.one / 2, endPos, rotate, 20, playerLayerMask))
                 Player.instance.Hit(dmg);
             yield return null;
@@ -186,18 +219,6 @@ public class secondBoss : Boss
             yield return null;
         }
         Destroy(line.gameObject);
-        yield return null;
-    }
-    protected IEnumerator DrawWaringLine(Vector3 pos , Quaternion rotation)
-    {
-        GameObject lineObeject;
-
-        lineObeject = Instantiate(bullet[0], pos, rotation);
-        lineObeject.GetComponent<Rigidbody>().velocity = lineObeject.transform.forward * waringLineDrawSpeed;
-
-        yield return new WaitForSeconds(1f);
-        StartCoroutine(DrawLaser(pos, lineObeject.transform.position));
-        Destroy(lineObeject);
         yield return null;
     }
     #endregion

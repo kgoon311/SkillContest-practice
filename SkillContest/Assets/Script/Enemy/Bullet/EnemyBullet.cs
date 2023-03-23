@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBullet : Entity
 {
-    [SerializeField] private float deathTimer;
+    [SerializeField] protected float deathTimer;
     protected override void Update()
     {
         base.Update();

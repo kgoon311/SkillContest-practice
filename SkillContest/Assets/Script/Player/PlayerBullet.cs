@@ -8,8 +8,6 @@ public class PlayerBullet : Entity
     protected override void Update()
     {
         base.Update();
-
-        
     }
     protected override void Move()
     {
