@@ -32,7 +32,12 @@ public class firstBoss : Boss
     }
     protected override IEnumerator AttackPattern()
     {
-        int attackCount = Random.Range(0, patternCount);
+        int attackCount = beforeAttack;
+
+        while(beforeAttack == attackCount)
+            attackCount = Random.Range(0, patternCount);
+
+        beforeAttack = attackCount; 
         for (int i = 0; i < 2; i++)
         {
             if (turrets[i].isDie == true)

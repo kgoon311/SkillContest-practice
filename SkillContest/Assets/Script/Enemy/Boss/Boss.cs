@@ -10,6 +10,7 @@ public class Boss : Entity
     
     [SerializeField] protected float atkSpeed;
     [SerializeField] protected int patternCount;
+    protected int beforeAttack;
     protected float atkTimer;
 
     [SerializeField] protected ParticleSystem deadParticle;
