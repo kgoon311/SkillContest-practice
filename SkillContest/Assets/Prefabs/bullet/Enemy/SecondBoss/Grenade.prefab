@@ -11664,6 +11664,6 @@ MonoBehaviour:
   speed: 10
   dmg: 5
   deathTimer: 6
-  maxAttackCount: 2
+  maxAttackCount: 6
   secondBoss: {fileID: 0}
   attackSpeed: 1

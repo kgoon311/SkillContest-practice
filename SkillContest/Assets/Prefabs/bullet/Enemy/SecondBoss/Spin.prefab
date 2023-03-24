@@ -11401,7 +11401,7 @@ MonoBehaviour:
   maxHp: 10
   speed: 5
   dmg: 5
-  deathTimer: 6
+  deathTimer: 10
   lineRenderer:
   - {fileID: 8376557678468936218}
   - {fileID: 4534563276001726085}

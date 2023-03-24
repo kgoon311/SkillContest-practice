@@ -25,7 +25,6 @@ public class secondBoss : Boss
     }
     protected override void Update()
     {
-        transform.LookAt(Player.instance.transform.position);
         for (int i = 0; i < 6; i++)
             drone[i + 6].transform.LookAt(Player.instance.transform.position);
 
@@ -47,7 +46,7 @@ public class secondBoss : Boss
         /// 2 : spinBall
         /// </summary>
         /// 
-        switch (attackCount)
+        switch (3)
         {
             case 0:
                 {

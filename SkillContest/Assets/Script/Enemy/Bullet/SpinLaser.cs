@@ -42,7 +42,7 @@ public class SpinLaser : EnemyBullet
                 lineRenderer[i].SetPosition(1, attackPos[i].transform.position);
             }
 
-            transform.Rotate(Vector3.up);
+            transform.Rotate(Vector3.up / 2);
             yield return null;
         }
 

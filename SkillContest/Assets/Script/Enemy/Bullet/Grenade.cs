@@ -29,14 +29,16 @@ public class Grenade : EnemyBullet
         float beforeSpeed = speed;
         speed = 0;
 
-        int count = Random.Range(1,maxAttackCount);
+        int count = Random.Range(3,maxAttackCount);
         for (int i = 0; i < count; i++)
         {
+            Debug.Log("?");
             float rotate = Random.Range(0, 361);
-            secondBoss.DrawWaringLine(transform.position, Quaternion.Euler(0, rotate, 0));
-            secondBoss.DrawWaringLine(transform.position, Quaternion.Euler(0, rotate + 180, 0));
+            transform.rotation = Quaternion.Euler(0, rotate + 90, 0);   
+            secondBoss.StartCoroutine(secondBoss.DrawWaringLine(transform.position, Quaternion.Euler(0, rotate, 0)));
+            secondBoss.StartCoroutine(secondBoss.DrawWaringLine(transform.position, Quaternion.Euler(0, rotate + 180, 0)));
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
         speed = beforeSpeed;
     }
