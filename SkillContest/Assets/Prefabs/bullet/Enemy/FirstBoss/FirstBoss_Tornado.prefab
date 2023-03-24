@@ -313,7 +313,7 @@ MonoBehaviour:
   bullet: {fileID: 6179792245108930222, guid: 02a59dabb039c1842b27b3ce6c696739, type: 3}
   atkSpeed: 2
   deathTimer: 5
-  rotationSpeed: 0
+  rotationSpeed: 0.49
   shootCount: 8
   shotPattern: 0
 --- !u!54 &6820357469901520169

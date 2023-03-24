@@ -8,6 +8,7 @@ using static UnityEngine.GraphicsBuffer;
 public class secondBoss : Boss
 {
     [Header("Drone")]
+    [SerializeField] private GameObject droneGroup;
     [SerializeField] private GameObject[] drone;
     [SerializeField] private Vector3[] droneStartPos;
     [SerializeField] private Vector3[] droneEndPos;
@@ -21,6 +22,7 @@ public class secondBoss : Boss
     protected override void Start()
     {
         playerLayerMask = LayerMask.GetMask("Player");
+        droneGroup.SetActive(true);
         base.Start();
     }
     protected override void Update()
@@ -46,7 +48,7 @@ public class secondBoss : Boss
         /// 2 : spinBall
         /// </summary>
         /// 
-        switch (3)
+        switch (attackCount)
         {
             case 0:
                 {

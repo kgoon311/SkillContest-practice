@@ -2354,7 +2354,7 @@ MonoBehaviour:
   maxHp: 0
   speed: 10
   dmg: 1
-  deathTimer: 3
+  deathTimer: 4
 --- !u!1 &6664189221271882844
 GameObject:
   m_ObjectHideFlags: 0
