@@ -49,11 +49,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 100
+  maxHp: 0
   speed: 4
   dmg: 0
   bullet: {fileID: 6344734081677408948, guid: f8765bbd6ede9624c87461b9b907d8db, type: 3}
-  atkSpeed: 1
-  deathTimer: 10
+  atkSpeed: 1.5
+  deathTimer: 7
   rotationSpeed: 100
   shootCount: 8
   shotPattern: 0

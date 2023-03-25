@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SpinLaser : EnemyBullet
 {
@@ -29,6 +30,12 @@ public class SpinLaser : EnemyBullet
     {
         isAttack = true;
 
+        Vector3 startPos; 
+        Vector3 endPos; 
+        Quaternion rotate;
+        LayerMask playerLayerMask = LayerMask.GetMask("Player");
+        
+
         float beforeSpeed = speed;
         speed = 0;
 
@@ -36,13 +43,21 @@ public class SpinLaser : EnemyBullet
         while(timer < 1)
         {
             timer += Time.deltaTime / 3;
+            startPos = transform.position;
+
             for(int i = 0;i<4;i++)
             {
+                endPos = attackPos[i].transform.position;
+                rotate = Quaternion.LookRotation(startPos, endPos);
+
                 lineRenderer[i].SetPosition(0, transform.position);
                 lineRenderer[i].SetPosition(1, attackPos[i].transform.position);
+
+                if (Physics.BoxCast(startPos, Vector3.one / 2, endPos, rotate, 20, playerLayerMask))
+                    Player.instance.Hit(dmg);
             }
 
-            transform.Rotate(Vector3.up / 2);
+            transform.Rotate(Vector3.up /4);
             yield return null;
         }
 

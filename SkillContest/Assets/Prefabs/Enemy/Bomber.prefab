@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 10
+  maxHp: 0
   speed: 5
   dmg: 10
   bullet: {fileID: 5738972315405738705, guid: ee913c263c8224c479709e476e18264e, type: 3}
@@ -38120,7 +38121,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 948
+  m_VersionIndex: 951
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

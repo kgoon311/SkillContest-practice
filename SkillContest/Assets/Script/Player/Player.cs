@@ -15,7 +15,7 @@ public class Player : Entity
 
     [SerializeField] private float inviTime;
     [Header("MoveRimite")]
-    [SerializeField] private Vector2[] moveRimite = new Vector2[2]; 
+    public Vector2[] moveRimite = new Vector2[2]; 
     [SerializeField] private float rotateSpeed;
 
     [Header("Attack")]

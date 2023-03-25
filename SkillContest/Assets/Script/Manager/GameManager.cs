@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private Entity[] bossScript = new Entity[3];
     private Animator[] bossAnimator = new Animator[3];
 
-    [SerializeField] private int bossIdx;
+    public int bossIdx;
     public bool bossActive;
     [Header("BossUI")]
     [SerializeField] private GameObject warningGroup;
@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
     {
         player = Player.instance;
         BossSetting();
-        BossSpawn();
     }
     // Update is called once per frame
     void Update()
@@ -276,10 +275,10 @@ public class GameManager : MonoBehaviour
             bossHpbar.transform.localPosition = Vector3.Lerp(bossHpbar.transform.localPosition, new Vector3(0,70,0) , timer);
             yield return null; 
         }
-
+        player.moveRimite[0] = new Vector2(-5.5f, -4);
+        player.moveRimite[1] = new Vector2(5.5f, 8.6f);
         if (bossIdx == 2)
         {
-            Debug.Log("?");
             timer = 0;
             while (timer < 1)
             {
@@ -301,6 +300,9 @@ public class GameManager : MonoBehaviour
 
                 yield return null;
             }
+
+            player.moveRimite[0] = new Vector2(-15 , -4f); 
+            player.moveRimite[1] = new Vector2(15 , 8.6f); 
         }
         EntityMnager.instance.isStop = false;
         EntityMnager.instance.isSpawnStop = false;

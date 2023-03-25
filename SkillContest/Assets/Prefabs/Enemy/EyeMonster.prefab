@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 502741541321984048}
   - component: {fileID: 502741541321984049}
   - component: {fileID: 502741541321984050}
-  - component: {fileID: 502741541321984051}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -9895,20 +9894,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502741541321984061}
   m_Mesh: {fileID: 0}
---- !u!64 &502741541321984051
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502741541321984061}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &502741542416511415
 GameObject:
   m_ObjectHideFlags: 0
@@ -9959,11 +9944,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 100
-  speed: 3
+  maxHp: 0
+  speed: 6
   dmg: 0
   bullet: {fileID: 2988452854028321796, guid: c8369938c7f27eb4a8a9789bbfc09d2b, type: 3}
-  atkSpeed: 1
-  deathTimer: 10
+  atkSpeed: 2
+  deathTimer: 8
 --- !u!54 &502741542416511563
 Rigidbody:
   m_ObjectHideFlags: 0
