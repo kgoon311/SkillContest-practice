@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class DroneBullet : Entity
 {
     [SerializeField] private float deathTimer;
-
+    [SerializeField] private GameObject particle;
     public GameObject targetObject;
 
     protected override void Update()
@@ -41,6 +42,7 @@ public class DroneBullet : Entity
         {
             Entity script = other.GetComponent<Entity>();
             script.Hit(dmg);
+            Instantiate(particle,transform.position,Quaternion.identity);
             Destroy(gameObject);
         }
     }

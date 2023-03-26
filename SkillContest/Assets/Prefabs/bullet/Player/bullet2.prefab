@@ -160,9 +160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2474f2e8fa59d47b7d7673312efec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitMaterial: {fileID: 0}
   isInvi: 0
   hp: 1
+  maxHp: 0
   speed: 30
+  dmg: 7
   deathTimer: 2
-  dmg: 0
+  particle: {fileID: 1298974692343819864, guid: ce90183c89c864245853498df47b1033, type: 3}

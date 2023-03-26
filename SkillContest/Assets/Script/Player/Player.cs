@@ -20,7 +20,7 @@ public class Player : Entity
 
     [Header("Attack")]
     [SerializeField] private float attackSpeed;
-    [SerializeField] private int attackLv;
+    [SerializeField] public int attackLv;
     [SerializeField] private GameObject[] bullet = new GameObject[3];
     private float attackTimer;
 
@@ -46,7 +46,7 @@ public class Player : Entity
     {
         base.Update();
 
-        if (hp <= 0 || oil <= 0)
+        if ((hp <= 0 || oil <= 0) && GameManager.Instance.isDie == false)
             GameOver();
     }
 
@@ -141,6 +141,6 @@ public class Player : Entity
     }
     private void GameOver()
     {
-
+        StartCoroutine(GameManager.Instance.PlayerDead());
     }
 }

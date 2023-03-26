@@ -9943,13 +9943,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvi: 0
-  hp: 100
+  hp: 80
   maxHp: 0
   speed: 6
   dmg: 0
   bullet: {fileID: 2988452854028321796, guid: c8369938c7f27eb4a8a9789bbfc09d2b, type: 3}
   atkSpeed: 2
-  deathTimer: 8
+  deadParticle: {fileID: 3422509606022206954, guid: 6974aa0e9a2056e4daca7d938678d478, type: 3}
+  deathTimer: 7
 --- !u!54 &502741542416511563
 Rigidbody:
   m_ObjectHideFlags: 0

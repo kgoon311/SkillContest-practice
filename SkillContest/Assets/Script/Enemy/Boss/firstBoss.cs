@@ -129,4 +129,16 @@ public class firstBoss : Boss
         Instantiate(bullet[bulletType], shotPos.position, shotPos.rotation);
         yield return null;
     }
+    protected override IEnumerator Dead()
+    {
+        GameManager.Instance.CameraShake(1, 1);
+        moveTimer = -0.5f;
+
+        yield return new WaitForSeconds(1.5f);
+
+        GameManager.Instance.bossActive = false;
+        GameManager.Instance.bossIdx++;
+        GameManager.Instance.StartCoroutine(GameManager.Instance.ClearStage());
+        gameObject.SetActive(false);
+    }
 }

@@ -7,6 +7,7 @@ public class Enemy : Entity
 {
     [SerializeField] protected GameObject bullet;
     [SerializeField] protected float atkSpeed;
+    [SerializeField] private GameObject deadParticle;
     protected float atkTimer;
 
     [SerializeField] private float deathTimer;
@@ -21,6 +22,10 @@ public class Enemy : Entity
         base.Update();
         if(EntityMnager.instance.isStop == false)
         Deadtimer();
+        if(hp <= 0)
+        {
+            Dead();
+        }
     }
     protected override void Move()
     {
@@ -41,7 +46,11 @@ public class Enemy : Entity
         if (deathTimer < 0)
             Destroy(gameObject);
     }
-  
+    protected void Dead()
+    {
+        Instantiate(deadParticle, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
     protected virtual IEnumerator AttackPattern()
     {
         Instantiate(bullet, transform.position, transform.rotation);

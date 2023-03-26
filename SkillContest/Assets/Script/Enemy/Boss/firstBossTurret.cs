@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class firstBossTurret : Entity
 {
-    [SerializeField] private ParticleSystem deadParticle;
-    [SerializeField] private ParticleSystem turretDeadParticle;
+    [SerializeField] private GameObject turretDeadParticle;
     public GameObject[] shotPos = new GameObject[2];
     public bool isDie;
     protected override void Update()
@@ -15,13 +14,12 @@ public class firstBossTurret : Entity
         if (hp <= 0 && isDie == false)
         {
             hp = 0;
-            turretDeadParticle.Play();
+            turretDeadParticle.SetActive(true);
             isDie = true; 
         }
     }
     protected IEnumerator Dead()
     {
-        deadParticle.Play();
         isInvi = true;
         yield return null;
     }

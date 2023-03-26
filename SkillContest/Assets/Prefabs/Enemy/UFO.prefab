@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 2642041137324970794}
   - component: {fileID: 2642041137324970797}
   - component: {fileID: 3892998883213609197}
-  m_Layer: 0
+  - component: {fileID: 5948515777044589131}
+  m_Layer: 7
   m_Name: UFO
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -48,12 +49,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvi: 0
-  hp: 100
+  hp: 60
   maxHp: 0
   speed: 4
   dmg: 0
   bullet: {fileID: 6344734081677408948, guid: f8765bbd6ede9624c87461b9b907d8db, type: 3}
   atkSpeed: 1.5
+  deadParticle: {fileID: 3422509606022206954, guid: 6974aa0e9a2056e4daca7d938678d478, type: 3}
   deathTimer: 7
   rotationSpeed: 100
   shootCount: 8
@@ -99,6 +101,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &5948515777044589131
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642041137324970795}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.35
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2642041137434574458
 GameObject:
   m_ObjectHideFlags: 0

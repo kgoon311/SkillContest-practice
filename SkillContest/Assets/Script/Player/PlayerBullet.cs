@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerBullet : Entity
 {
     [SerializeField] private float deathTimer;
+    [SerializeField] private GameObject particle;
     protected override void Update()
     {
         base.Update();
@@ -27,6 +28,7 @@ public class PlayerBullet : Entity
         {
             Entity script = other.GetComponent<Entity>();
             script.Hit(dmg);
+            Instantiate(particle , transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Vector3[] lastUiPos = new Vector3[2];
     [SerializeField] private RectTransform[] lastUiObjects = new RectTransform[2];
     [Header("UI")]
+    [SerializeField] private Image fadePanel;
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider oilSlider;
     [SerializeField] private Slider map;
@@ -46,6 +48,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text[] skillCoolTime;
     private Color[] coolTextColor = new Color[2];
 
+    [SerializeField] private RectTransform clearPanel;
+    [SerializeField] private Image clearBGPanel;
+    [SerializeField] private Text clear_scoreText;
+    [SerializeField] private Text clear_timeText;
+    [SerializeField] private Text clear_hpText;
+    [SerializeField] private Text clear_oilText;
+    [SerializeField] private Text nextText;
+
+    public bool isDie;
     private float f_score;
     private float f_timer;
     private float bossTimer;
@@ -72,7 +83,7 @@ public class GameManager : MonoBehaviour
         beforeCameraPos = Camera.main.transform.position;
         beforeCameraRotate = Camera.main.transform.rotation;
         for (int i = 0; i < 2; i++)
-        { 
+        {
             coolTextColor[i] = skillCoolTime[i].color;
         }
     }
@@ -85,8 +96,9 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         UIUpdate();
+        enemys.RemoveAll(item => item == null);
 
-        if(EntityMnager.instance.isStop == false)
+        if (EntityMnager.instance.isStop == false)
             Skill();
     }
     void UIUpdate()
@@ -121,8 +133,11 @@ public class GameManager : MonoBehaviour
             skillTimer[i] += Time.deltaTime;
             skill[i].fillAmount = skillTimer[i] / coolTime[i];
         }
-        bossTimer += Time.deltaTime;
-        f_timer += Time.deltaTime;
+        if (EntityMnager.instance.isStop == false)
+        {
+            bossTimer += Time.deltaTime;
+            f_timer += Time.deltaTime;
+        }
 
         //HP,Oil
         hpSlider.value = player._hp / player._maxHp;
@@ -154,7 +169,7 @@ public class GameManager : MonoBehaviour
             else
                 CoolTimeText();
         }
-            
+
     }
     private void CoolTimeText()
     {
@@ -171,7 +186,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         float timer = 1;
-        while(timer > 0)
+        while (timer > 0)
         {
             timer -= Time.deltaTime * 3;
             for (int i = 0; i < 2; i++)
@@ -249,12 +264,12 @@ public class GameManager : MonoBehaviour
 
         EntityMnager.instance.isStop = true;
         EntityMnager.instance.isSpawnStop = true;
-        StartCoroutine(ActiveWarningText(4f)) ;
+        StartCoroutine(ActiveWarningText(4f));
         CameraShake(4, 1);
 
         yield return new WaitForSeconds(4f);
 
-        StartCoroutine(CameraMove(bossCameraPos, bossCameraRotate , 2));
+        StartCoroutine(CameraMove(bossCameraPos, bossCameraRotate, 2));
 
         yield return new WaitForSeconds(2f);
 
@@ -262,7 +277,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        StartCoroutine(CameraMove(beforeCameraPos , beforeCameraRotate, 1));
+        StartCoroutine(CameraMove(beforeCameraPos, beforeCameraRotate, 1));
 
         yield return new WaitForSeconds(1);
 
@@ -272,8 +287,8 @@ public class GameManager : MonoBehaviour
         while (timer < 1)
         {
             timer += Time.deltaTime;
-            bossHpbar.transform.localPosition = Vector3.Lerp(bossHpbar.transform.localPosition, new Vector3(0,70,0) , timer);
-            yield return null; 
+            bossHpbar.transform.localPosition = Vector3.Lerp(bossHpbar.transform.localPosition, new Vector3(0, 70, 0), timer);
+            yield return null;
         }
         player.moveRimite[0] = new Vector2(-5.5f, -4);
         player.moveRimite[1] = new Vector2(5.5f, 8.6f);
@@ -295,14 +310,14 @@ public class GameManager : MonoBehaviour
             while (timer < 1)
             {
                 timer += Time.deltaTime / 2;
-                skillGroup.anchoredPosition  = Vector3.Lerp(skillGroup.anchoredPosition, lastSkillPos, timer);
+                skillGroup.anchoredPosition = Vector3.Lerp(skillGroup.anchoredPosition, lastSkillPos, timer);
                 lastHpGroup.anchoredPosition = Vector3.Lerp(lastHpGroup.anchoredPosition, lastHpPos, timer);
 
                 yield return null;
             }
 
-            player.moveRimite[0] = new Vector2(-15 , -4f); 
-            player.moveRimite[1] = new Vector2(15 , 8.6f); 
+            player.moveRimite[0] = new Vector2(-15, -4f);
+            player.moveRimite[1] = new Vector2(15, 8.6f);
         }
         EntityMnager.instance.isStop = false;
         EntityMnager.instance.isSpawnStop = false;
@@ -325,7 +340,7 @@ public class GameManager : MonoBehaviour
         }
         warningGroup.SetActive(false);
     }
-    private IEnumerator CameraMove(Vector3 pos,Quaternion rotate, float time)
+    private IEnumerator CameraMove(Vector3 pos, Quaternion rotate, float time)
     {
         float whileTimer = 0;
         while (whileTimer < 1)
@@ -334,7 +349,7 @@ public class GameManager : MonoBehaviour
 
             Transform camPos = Camera.main.transform;
             camPos.position = Vector3.Lerp(camPos.position, pos, whileTimer);
-            camPos.rotation = Quaternion.Lerp(camPos.rotation,rotate, whileTimer);
+            camPos.rotation = Quaternion.Lerp(camPos.rotation, rotate, whileTimer);
             yield return null;
         }
     }
@@ -355,5 +370,96 @@ public class GameManager : MonoBehaviour
 
         Camera.main.transform.position = beforeCameraPos;
         yield return null;
+    }
+
+    public IEnumerator ClearStage()
+    {
+        float whileTimer = 0;
+        EntityMnager.instance.isStop = true;
+
+        clear_scoreText.text = $"{f_score}";
+        clear_timeText.text = $"{((f_timer / 60) < 10 ? "0" : "")}{(int)(f_timer / 60)}" +
+                             $" : {((f_timer % 60) < 10 ? "0" : "")}{(int)(f_timer % 60)}";
+        clear_hpText.text = $"{player._hp}";
+        clear_oilText.text = $"{player._oil}";
+
+        while (whileTimer < 1)
+        {
+            whileTimer += Time.deltaTime;
+
+            clearBGPanel.color = new Color(0, 0, 0, whileTimer - 0.1f);
+            clearPanel.localPosition = Vector3.Lerp(clearPanel.localPosition, Vector3.zero, whileTimer);
+
+            yield return null;
+        }
+        yield return null;
+    }
+    public IEnumerator PlayerDead()
+    {
+        float whileTimer = 0;
+        EntityMnager.instance.isStop = true;
+        EntityMnager.instance.isSpawnStop = true;
+
+        clear_scoreText.text = $"{f_score}";
+        clear_timeText.text = $"{((f_timer / 60) < 10 ? "0" : "")}{(int)(f_timer / 60)}" +
+                             $" : {((f_timer % 60) < 10 ? "0" : "")}{(int)(f_timer % 60)}";
+        clear_hpText.text = $"{player._hp}";
+        clear_oilText.text = $"{player._oil}";
+        nextText.text = "ReGame";
+        isDie = true;
+        while (whileTimer < 1)
+        {
+            whileTimer += Time.deltaTime;
+
+            clearBGPanel.color = new Color(0, 0, 0, whileTimer - 0.1f);
+            clearPanel.localPosition = Vector3.Lerp(clearPanel.localPosition, Vector3.zero, whileTimer);
+
+            yield return null;
+        }
+        yield return null;
+    }
+    public void NextPage()
+    {
+        StartCoroutine(C_NextPage());
+    }
+    private IEnumerator C_NextPage()
+    {
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            fadePanel.color = new Color(1, 1, 1, timer);
+            yield return null;
+        }
+        yield return new WaitForSeconds(2f);
+        if (isDie == true)
+        {
+            f_timer = 0;
+            f_score = 0;
+            bossIdx = 0;
+            bossTimer = 0;
+            player.attackLv = 0;
+            player._hp = player._maxHp;
+            player._oil = player._maxOil;
+            isDie = false;
+        }
+        clearPanel.position += Vector3.up * 10;
+        clearBGPanel.color = new Color(0, 0, 0, 0);
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            fadePanel.color = new Color(1, 1, 1, timer);
+            yield return null;
+        }
+
+        foreach(Enemy enemy in enemys)
+        {
+            if (enemy == null)
+                enemys.Remove(enemy);
+            else
+            Destroy(enemy.gameObject);
+        }
+        EntityMnager.instance.isSpawnStop = false;
+        EntityMnager.instance.isStop = false;
     }
 }

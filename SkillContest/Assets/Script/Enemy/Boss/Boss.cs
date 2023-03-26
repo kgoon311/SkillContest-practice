@@ -13,7 +13,7 @@ public class Boss : Entity
     protected int beforeAttack;
     protected float atkTimer;
 
-    [SerializeField] protected ParticleSystem deadParticle;
+    [SerializeField] protected GameObject deadParticle;
     protected Vector3 beforePos;
     protected Vector3 movePos = new Vector3(0, 0, 13);
     protected float moveTimer = 0;
@@ -51,12 +51,13 @@ public class Boss : Entity
     {
         GameManager.Instance.CameraShake(1, 1);
 
-        deadParticle.Play();
+        deadParticle.SetActive(true);
         moveTimer = -0.5f;
 
         yield return new WaitForSeconds(1.5f);
-
+        
         GameManager.Instance.bossActive = false;
+        GameManager.Instance.StartCoroutine(GameManager.Instance.ClearStage());
         gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)

@@ -68157,7 +68157,7 @@ GameObject:
   - component: {fileID: 7467713543108022300}
   - component: {fileID: 8434813670312774622}
   - component: {fileID: 8434813670312774621}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Warigari
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -68195,10 +68195,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInvi: 0
   hp: 100
+  maxHp: 0
   speed: 3
   dmg: 0
   bullet: {fileID: 4164457902629859902, guid: 32f27e05d59f92246abae4f661810625, type: 3}
   atkSpeed: 1
+  deadParticle: {fileID: 3422509606022206954, guid: 6974aa0e9a2056e4daca7d938678d478, type: 3}
   deathTimer: 10
   rotationSpeed: 500
   shootCount: 6
