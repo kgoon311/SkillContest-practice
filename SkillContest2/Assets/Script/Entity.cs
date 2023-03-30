@@ -13,16 +13,16 @@ public abstract class Entity : MonoBehaviour
         set
         {
             hp = value;
-            HitAnim();
+            StartCoroutine(HitAnim());
             if (hp <= 0)
                 Dead();
         }
     }
-    [SerializeField] protected float maxHp;
+    public float maxHp;
     [SerializeField] protected float dmg;
     [SerializeField] protected float speed;
     [SerializeField] protected float attackSpeed;
-    private float attackTimer;
+    protected float attackTimer;
 
     protected virtual void Awake()
     {
@@ -44,15 +44,19 @@ public abstract class Entity : MonoBehaviour
     {
         attackTimer += Time.deltaTime;
         if (attackTimer > attackSpeed)
-            AttackPattern();
+        {
+            attackTimer = 0;
+            StartCoroutine(AttackPattern());
+        }
     }
-    protected virtual void AttackPattern()
+    protected virtual IEnumerator AttackPattern()
     {
 
+        yield return null;
     }
-    protected virtual void HitAnim()
+    protected virtual IEnumerator HitAnim()
     {
-
+        yield return null;
     }
     protected abstract void Move();
     protected abstract void Dead();

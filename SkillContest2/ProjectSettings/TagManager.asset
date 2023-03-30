@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Item
+  - Invi
+  - I_Invi
+  - I_Upgrade
+  - I_Heal
+  - I_Oil
   layers:
   - Default
   - TransparentFX

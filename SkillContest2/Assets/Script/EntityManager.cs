@@ -5,19 +5,16 @@ using UnityEngine;
 
 public class EntityManager : Singleton<EntityManager>
 {
-    public Material hitMatarial;
-
     public bool isStop;
     public bool isSpawnStop;
 
-    void Start()
+    public GameObject hitParticle;
+    public GameObject deadParticle;
+    public GameObject scoreObject;
+    public void DeadParticle(Vector3 pos)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Instantiate(EntityManager.Instance.deadParticle, transform.position, transform.rotation);
+        for (int i = 0; i < 10; i++)
+            Instantiate(scoreObject, pos, Quaternion.Euler(0,Random.Range(0f,361f),0));
     }
 }
