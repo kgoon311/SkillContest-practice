@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityManager : Singleton<EntityManager>
+public class EntityManager : SingletonD<EntityManager>
 {
     public bool isStop;
     public bool isSpawnStop;
 
     public GameObject hitParticle;
+    public GameObject drawParticle;
     public GameObject deadParticle;
     public GameObject scoreObject;
     public void DeadParticle(Vector3 pos)

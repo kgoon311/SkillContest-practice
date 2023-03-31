@@ -7,8 +7,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class Player : Entity
+public class Player : Entity 
 {
+    public static Player Instance { get; set; }
     private float oil;
     public float _oil
     {
@@ -33,8 +34,10 @@ public class Player : Entity
     [SerializeField] private GameObject[] bullet;
     [Header("Drone")]
     [SerializeField] private GameObject[] droneGroup;
+    [SerializeField] private Vector3[] dronePos;
+    [SerializeField] private float droneSpeed;
     [SerializeField] private int droneIdx = 0;
-    private GameObject targetObject;
+    [HideInInspector]public GameObject targetObject;
     
     private string inviTag;
     private string playerTag;
@@ -60,6 +63,29 @@ public class Player : Entity
     {
         base.myUpdate();
     }
+    protected override void Move()
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+
+        transform.position += new Vector3(x , 0, y) * Time.deltaTime * speed;
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, moveRemete[0].x, moveRemete[1].x), 0,
+                                         Mathf.Clamp(transform.position.z, moveRemete[0].z, moveRemete[1].z));
+
+        rotationTimer = Mathf.Lerp(rotationTimer, x * rotationSpeed, Time.deltaTime);
+        rotationTimer = Mathf.Clamp(rotationTimer, -40f, 40f);
+        transform.rotation = Quaternion.Euler(0, 0, rotationTimer);
+        for (int i = 0; i < droneIdx; i++)
+        {
+            droneGroup[i].transform.position = Vector3.Lerp(droneGroup[i].transform.position, 
+                                                            transform.position + dronePos[i], 
+                                                            Time.deltaTime * 3);
+            if (targetObject != null)
+                droneGroup[i].transform.LookAt(targetObject.transform);
+            else
+                droneGroup[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
     protected override void Attack()
     {
         if (Input.GetKey(KeyCode.Space))
@@ -75,6 +101,7 @@ public class Player : Entity
     {
         for(int i = 0; i < droneIdx; i++)
         {
+            
             Instantiate(bullet[3], droneGroup[i].transform.position, droneGroup[i].transform.rotation);
         }
         switch (attackLv)
@@ -111,19 +138,7 @@ public class Player : Entity
     protected override void Dead()
     {
     }
-    protected override void Move()
-    {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-
-        transform.position += new Vector3(x, 0, y);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, moveRemete[0].x, moveRemete[1].x), 0, 
-                                         Mathf.Clamp(transform.position.z, moveRemete[0].z, moveRemete[1].z));
-
-        rotationTimer = Mathf.Lerp(rotationTimer,x * rotationSpeed,Time.deltaTime);
-        rotationTimer = Mathf.Clamp(rotationTimer,-40f, 40f);
-        transform.rotation = Quaternion.Euler(0, 0, rotationTimer);
-    }
+   
     protected override IEnumerator HitAnim()
     {
         hitObject.SetActive(true);
