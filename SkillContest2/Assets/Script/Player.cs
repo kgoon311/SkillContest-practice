@@ -29,7 +29,7 @@ public class Player : Entity
 
    
     [Header("Attack")]
-    [SerializeField] private Vector3[] shotPos;
+    [SerializeField] private GameObject[] shotPos;
     [SerializeField] private int attackLv;
     [SerializeField] private GameObject[] bullet;
     [Header("Drone")]
@@ -37,7 +37,7 @@ public class Player : Entity
     [SerializeField] private Vector3[] dronePos;
     [SerializeField] private float droneSpeed;
     [SerializeField] private int droneIdx = 0;
-    [HideInInspector]public GameObject targetObject;
+    public GameObject targetObject;
     
     private string inviTag;
     private string playerTag;
@@ -48,16 +48,18 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
+        Instance = this; 
         inviTag = "Invi";
         playerTag = "Player";
     }
     private void Start()
     {
-        GameManger.Instance.player = this;
     }
     protected override void Update()
     {
         base.Update();
+        moveRemete[0].x = -(5f + (3f / 8f) * transform.position.z);
+        moveRemete[1].x = 5f + (3f / 8f) * transform.position.z;
     }
     protected override void myUpdate()
     {
@@ -89,12 +91,14 @@ public class Player : Entity
     protected override void Attack()
     {
         if (Input.GetKey(KeyCode.Space))
+        {
             attackTimer += Time.deltaTime;
+        }
 
         if (attackTimer > attackSpeed)
         {
             attackTimer = 0;
-            AttackPattern();
+            StartCoroutine(AttackPattern());
         }
     }
     protected override IEnumerator AttackPattern()
@@ -108,27 +112,27 @@ public class Player : Entity
         { 
             case 0:
                 {
-                    Instantiate(bullet[0], transform.position, transform.rotation);
+                    Instantiate(bullet[0], shotPos[0].transform.position, transform.rotation);
                     break;
                 }
             case 1:
                 {
-                    Instantiate(bullet[0], transform.position + shotPos[0], transform.rotation);
-                    Instantiate(bullet[0], transform.position + shotPos[2], transform.rotation);
+                    Instantiate(bullet[0], shotPos[1].transform.position, transform.rotation);
+                    Instantiate(bullet[0], shotPos[2].transform.position, transform.rotation);
                     break;
                 }
             case 2:
                 {
-                    Instantiate(bullet[0], transform.position + shotPos[0], transform.rotation);
-                    Instantiate(bullet[1], transform.position + shotPos[1], transform.rotation);
-                    Instantiate(bullet[0], transform.position + shotPos[2], transform.rotation);
+                    Instantiate(bullet[0], shotPos[1].transform.position, transform.rotation);
+                    Instantiate(bullet[1], shotPos[0].transform.position, transform.rotation);
+                    Instantiate(bullet[0], shotPos[2].transform.position, transform.rotation);
                     break;
                 }
             case 3:
                 {
-                    Instantiate(bullet[1], transform.position + shotPos[0], transform.rotation);
-                    Instantiate(bullet[2], transform.position + shotPos[1], transform.rotation);
-                    Instantiate(bullet[1], transform.position + shotPos[2], transform.rotation);
+                    Instantiate(bullet[1], shotPos[1].transform.position, transform.rotation);
+                    Instantiate(bullet[2], shotPos[0].transform.position, transform.rotation);
+                    Instantiate(bullet[1], shotPos[2].transform.position, transform.rotation);
                     break;
                 }
             

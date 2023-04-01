@@ -5,7 +5,11 @@ using UnityEngine;
 public class Bullet : Entity
 {
     [SerializeField] private float deadTime;
-    [SerializeField] private float deadTimer;
+    private float deadTimer = 0;
+    protected override void Update()
+    {
+        base.Update();
+    }
     protected override void myUpdate()
     {
         base.myUpdate();
@@ -13,7 +17,7 @@ public class Bullet : Entity
     }
     protected override void Move()
     {
-        transform.position += transform.forward * speed;
+        transform.position += transform.forward * speed * Time.deltaTime;
     }
     protected override IEnumerator AttackPattern()
     {
@@ -23,7 +27,10 @@ public class Bullet : Entity
     {
         deadTimer += Time.deltaTime;
         if (deadTimer > deadTime)
+        {
             Destroy(gameObject);
+        }
+            
     }
     protected override void Dead()
     {

@@ -10,7 +10,7 @@ public class Eye : Enemy
     {
         for(int i = -shotCount / 2; i <= shotCount / 2; i++)
         {
-            Quaternion rotete = Quaternion.Euler(0, model.transform.rotation.y - shotDis * i , 0);
+            Quaternion rotete = Quaternion.Euler(0, model.transform.rotation.eulerAngles.y - shotDis * i , 0);
             Instantiate(bullet[0], transform.position, rotete); 
         }
         yield return null; 
@@ -18,6 +18,6 @@ public class Eye : Enemy
     protected override void Move()
     {
         base.Move();
-        model.transform.LookAt(GameManger.Instance.player.transform);
+        model.transform.LookAt(Player.Instance.transform);
     }
 }

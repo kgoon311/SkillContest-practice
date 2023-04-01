@@ -11,6 +11,7 @@ public class EntityManager : SingletonD<EntityManager>
     public GameObject hitParticle;
     public GameObject drawParticle;
     public GameObject deadParticle;
+    public GameObject bossDeadParticle;
     public GameObject scoreObject;
     public void DeadParticle(Vector3 pos)
     {

@@ -11,6 +11,7 @@ TagManager:
   - I_Upgrade
   - I_Heal
   - I_Oil
+  - DontShot
   layers:
   - Default
   - TransparentFX
