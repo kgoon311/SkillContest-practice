@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GameManger : Singleton<GameManger>
 {
-    public float score;
-
     [Header("camera")]
     private Coroutine cameraShakeCorotine;
     private bool cameraShaking;

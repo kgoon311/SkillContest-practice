@@ -26,7 +26,8 @@ public class Player : Entity
     [SerializeField] private Vector3[] lsatBossMoveRemete;
     [SerializeField] private float rotationSpeed;
     private float rotationTimer;
-
+    public float[] skillCool;
+    public float[] skillCoolTimer;
    
     [Header("Attack")]
     [SerializeField] private GameObject[] shotPos;
@@ -37,6 +38,10 @@ public class Player : Entity
     [SerializeField] private Vector3[] dronePos;
     [SerializeField] private float droneSpeed;
     [SerializeField] private int droneIdx = 0;
+    [Header("Skill")]
+    [SerializeField] private ParticleSystem HealEffect;
+    [SerializeField] private ParticleSystem BoomEffect;
+    [SerializeField] private GameObject targetParticle;
     public GameObject targetObject;
     
     private string inviTag;
@@ -54,6 +59,7 @@ public class Player : Entity
     }
     private void Start()
     {
+        
     }
     protected override void Update()
     {
@@ -64,6 +70,9 @@ public class Player : Entity
     protected override void myUpdate()
     {
         base.myUpdate();
+        Skill();
+        for (int i = 0; i < 3; i++)
+            skillCoolTimer[i] -= Time.deltaTime;
     }
     protected override void Move()
     {
@@ -99,6 +108,41 @@ public class Player : Entity
         {
             attackTimer = 0;
             StartCoroutine(AttackPattern());
+        }
+    }
+    private void Skill()
+    {
+        if (targetObject != null)
+        {
+            targetParticle.SetActive(true);
+            targetParticle.transform.position = targetObject.transform.position; 
+        }
+        else
+            targetParticle.SetActive(false);
+
+        if (Input.GetKeyDown(KeyCode.Z) && skillCoolTimer[0] < 0) Targeting();
+
+    }
+    private void Targeting()
+    {
+        RaycastHit hit;
+        if(Physics.BoxCast(transform.position,Vector3.one,Vector3.forward,out hit,transform.rotation,10000,LayerMask.GetMask("Enemy")))
+            targetObject = hit.transform.gameObject;
+    }
+    private void Heal()
+    {
+        _hp += 50;
+        HealEffect.Play();
+    }
+
+    private void Boom()
+    {
+        List<Entity> enemys = EntityManager.Instance.enemys;
+        enemys.RemoveAll(e => e == null);
+        BoomEffect.Play();
+        foreach (Entity ent in enemys)
+        {
+            ent._hp -= dmg;
         }
     }
     protected override IEnumerator AttackPattern()
@@ -179,26 +223,31 @@ public class Player : Entity
             case "I_Upgrade":
                 if (attackLv == 3)
                 {
-                    GameManger.Instance.score += 10;
+                    InGameManager.Instance.AddScore(10);
                     break;
                 }
+                InGameManager.Instance.ItemCount++;
                 attackLv++;
                 break;
             case "I_AddDrone":
                 if (droneIdx == 4)
                 {
-                    GameManger.Instance.score += 10;
+                    InGameManager.Instance.AddScore(10);
                     break;
                 }
+                InGameManager.Instance.ItemCount++;
                 droneIdx++;
                 break;
             case "I_Invi":
+                InGameManager.Instance.ItemCount++;
                 Invi(2f);
                 break;
             case "I_Heal":
+                InGameManager.Instance.ItemCount++;
                 _hp += 10;
                 break;
             case "I_Oil":
+                InGameManager.Instance.ItemCount++;
                 _oil += 40;
                 break;
         }

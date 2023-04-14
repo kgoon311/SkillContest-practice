@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6288004789157735341}
   - component: {fileID: 5320790211385911237}
   - component: {fileID: 6189779050143440687}
-  - component: {fileID: 1305482330231243063}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -15188,7 +15187,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 756
+  m_VersionIndex: 759
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15277,26 +15276,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3726624525233300669}
   m_Mesh: {fileID: 0}
---- !u!114 &1305482330231243063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3726624525233300669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f97096f23942442bd130a984fa364d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHp: 0
-  dmg: 0
-  speed: 0
-  attackSpeed: 0
-  model: {fileID: 0}
-  bullet: []
-  deadTime: 0
-  shotCount: 0
 --- !u!1 &4840246653333154599
 GameObject:
   m_ObjectHideFlags: 0
@@ -15376,7 +15355,7 @@ MonoBehaviour:
   maxHp: 100
   dmg: 10
   speed: 5
-  attackSpeed: 0
+  attackSpeed: 2
   model: {fileID: 3726624525233300669}
   bullet:
   - {fileID: 7696015427166368133, guid: b940fe61be54ac34d849ae7b3ffb56fb, type: 3}
